@@ -18,29 +18,6 @@
             </el-menu-item-group>
           </el-submenu>
 
-          <!-- <el-submenu index="2">
-            <template #title
-              ><router-link to="/message"
-                ><i class="el-icon-menu"></i>Message</router-link
-              ></template
-            >
-          </el-submenu> -->
-
-          <!-- <el-submenu index="3">
-            <template #title
-              ><router-link to="/friendlist"
-                ><i class="el-icon-s-custom"></i>Friends</router-link
-              ></template
-            >
-            <el-menu-item-group>
-              <template #title>My friend</template>
-            </el-menu-item-group>
-
-            <el-menu-item-group>
-              <template #title>Block list</template>
-            </el-menu-item-group>
-          </el-submenu> -->
-
           <el-submenu index="4">
             <template #title
               ><router-link to="/userpage_roomlist"
@@ -58,14 +35,6 @@
             <el-menu-item-group>
               <template #title>History</template>
             </el-menu-item-group>
-          </el-submenu>
-
-          <el-submenu index="5">
-            <template #title
-              ><router-link to="/notification"
-                ><i class="el-icon-message-solid"></i>Notification</router-link
-              ></template
-            >
           </el-submenu>
         </el-menu>
       </el-aside>

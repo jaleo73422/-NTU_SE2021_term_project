@@ -70,25 +70,56 @@
                       font-size: 20px;
                     "
                   >
-                    <br />{{ user.last_name }},<el-button
+                    <br />{{ user.lastName }},<el-button
                       class="btn"
-                      @click="clicklname">edit</el-button>
-                      {{ user.first_name }}<el-button class="btn" @click="clickfname">edit</el-button>
+                      @click="clickLastName">edit</el-button>
+                      {{ user.firstName }}<el-button class="btn" @click="clickFirstName">edit</el-button>
                   </h2>
-                  <input
-                    v-show="checklname"
+
+                  <el-alert
+                    v-show="checkLastName"
+                    type="info"
+                    @close="cancelEditLastName"
+                    >
+                    <input
+                    v-if="checkLastName"
                     type="text"
-                    v-model="last_name"
-                    @keyup.enter="savelname"
+                    v-model="lastName"
+                    prefix-icon="fas fa-lock"
+                    @keyup.enter="saveLastName"
                     ref="newlastname"/>
-                  <el-button v-show="checklname" @click="savelname">save</el-button>
-                  <input
-                    v-show="checkfname"
+                    <el-button v-show="checkLastName" @click="saveLastName">save</el-button>
+                  </el-alert>
+
+                  <el-alert
+                    v-show="checkFirstName"
+                    type="info"
+                    @close="cancelEditFirstName"
+                    >
+                    <input
+                    v-if="checkFirstName"
                     type="text"
-                    v-model="first_name"
-                    @keyup.enter="savefname"
+                    v-model="firstName"
+                    prefix-icon="fas fa-lock"
+                    @keyup.enter="saveFirstName"
                     ref="newfirstname"/>
-                  <el-button v-show="checkfname" @click="savefname">save</el-button>
+                    <el-button v-show="checkFirstName" @click="saveFirstName">save</el-button>
+                  </el-alert>
+
+                  <!-- <input
+                    v-show="checkLastName"
+                    type="text"
+                    v-model="lastName"
+                    @keyup.enter="saveLastName"
+                    ref="newlastname"/>
+                  <el-button v-show="checkLastName" @click="saveLastName">save</el-button>
+                  <input
+                    v-show="checkFirstName"
+                    type="text"
+                    v-model="firstName"
+                    @keyup.enter="saveFirstName"
+                    ref="newfirstname"/>
+                  <el-button v-show="checkFirstName" @click="saveFirstName">save</el-button> -->
                 </el-row>
 
                 <el-row>
@@ -143,41 +174,41 @@
                   ><br />
                     <el-button
                     class="btn" 
-                    @click="clickchangepasswoed">change</el-button>
+                    @click="clickChangePasswoed">change</el-button>
 
                     <el-alert
-                      v-show="checkchangepassword"
+                      v-show="checkChangePassword"
                       title="Change your password!"
                       type="info"
                       closable="false"
-                      @close="notchangepassword"
+                      @close="CancelChangePassword"
                       center>
                       <input
                         center
-                        v-model="passwordmodel.oldpassword"
+                        v-model="passwordModel.oldPassword"
                         placeholder="Old password"
-                        type="primary"
+                        type="password"
                         prefix-icon="fas fa-lock"
-                        ref="oldpassword"/>
+                        ref="oldPassword"/>
                       <br/>
                       <input
                         center
-                        v-model="passwordmodel.newpassword1"
+                        v-model="passwordModel.newPassword1"
                         placeholder="New password"
-                        type="primary"
+                        type="password"
                         prefix-icon="fas fa-lock"
-                        ref="newpassword1"/>
+                        ref="newPassword1"/>
                       <br/>
                       <input
                         center
-                        v-model="passwordmodel.newpassword2"
+                        v-model="passwordModel.newPassword2"
                         placeholder="Again"
-                        type="primary"
+                        type="password"
                         prefix-icon="fas fa-lock"
-                        ref="newpassword2"
-                        @keyup.enter="sumitchange"/>
+                        ref="newPassword2"
+                        @keyup.enter="sumitChangePassword"/>
                       <br/>
-                      <el-button type="info" round @click="sumitchange">Save</el-button>
+                      <el-button type="info" round @click="sumitChangePassword">Save</el-button>
                     </el-alert>
                   </h2>
                   <h2
@@ -203,32 +234,27 @@
 <script>
 import UserPageSideBar from '@/components/UserPageSideBar.vue'
 import UserService from '@/services/UserService.js'
-
 export default {
   components: {
     UserPageSideBar,
   },
-
   data() {
     return {
-      checknickname: false,
-      checkmail: false,
-      checklname: false,
-      checkfname: false,
-      checkdepartment: false,
-      checkchangepassword: false,
+      checkLastName: false,
+      checkFirstName: false,
+      checkChangePassword: false,
       user: {
         id: 0,
         nickname: '',
         email: '',
         department: '',
-        last_name: '',
-        first_name: '',
+        lastName: '',
+        firstName: '',
       },
-      passwordmodel: {
-        oldpassword: '',
-        newpassword1: '',
-        newpassword2: '',
+      passwordModel: {
+        oldPassword: '',
+        newPassword1: '',
+        newPassword2: '',
       },
       loading: false,
       rules: {
@@ -243,7 +269,6 @@ export default {
       },
     }
   },
-
   async created() {
     if (this.$store.state.token) {
       this.$store
@@ -264,8 +289,8 @@ export default {
           this.user.email = res.data.email
           this.user.nickname = res.data.email
           this.user.department = res.data.department
-          this.user.last_name = res.data.last_name
-          this.user.first_name = res.data.first_name
+          this.user.lastName = res.data.last_name
+          this.user.firstName = res.data.first_name
         })
         .catch((err) => {
           if (
@@ -285,47 +310,51 @@ export default {
       })
     }
   },
-
   methods: {
-    clicklname() {
-      this.checklname = true
+    clickLastName() {
+      this.checkLastName = true
     },
-    savelname() {
-      this.checklname = false
-      this.user.last_name=this.$refs.newlastname.value
+    cancelEditLastName() {
+      this.checkLastName = false
+    },
+    saveLastName() {
+      this.checkLastName = false
+      this.user.lastName=this.$refs.newlastname.value
       console.log('666', this.$refs.newlastname.value)
-      UserService.putUserEdit(this.user.id, this.$refs.newlastname.value, this.user.first_name)
+      UserService.putUserEdit(this.user.id, this.$refs.newlastname.value, this.user.firstName)
     },
-    clickfname() {
-      this.checkfname = true
+    clickFirstName() {
+      this.checkFirstName = true
     },
-    savefname() {
-      this.checkfname = false
-      this.user.first_name=this.$refs.newfirstname.value
+    cancelEditFirstName() {
+      this.checkFirstName = false
+    },
+    saveFirstName() {
+      this.checkFirstName = false
+      this.user.firstName=this.$refs.newfirstname.value
       console.log('777', this.$refs.newfirstname.value)
-      UserService.putUserEdit(this.user.id, this.user.last_name, this.$refs.newfirstname.value)
+      UserService.putUserEdit(this.user.id, this.user.lastName, this.$refs.newfirstname.value)
     },
-    clickchangepasswoed() {
-      this.checkchangepassword = true
-      console.log("12346", this.checkchangepassword)
+    clickChangePasswoed() {
+      this.checkChangePassword = true
+      console.log("12346", this.checkChangePassword)
     },
-    notchangepassword() {
-      this.checkchangepassword = false
-      console.log("7891011", this.checkchangepassword)
+    CancelChangePassword() {
+      this.checkChangePassword = false
+      console.log("7891011", this.checkChangePassword)
     },
-    sumitchange() {
+    sumitChangePassword() {
       console.log("111")
-      if (this.$refs.newpassword1.value != this.$refs.newpassword2.value) {
+      if (this.$refs.newPassword1.value != this.$refs.newPassword2.value) {
         console.log("wrong")
         this.failChangePassword()
       } else {
-        UserService.putChangePassword(this.user.id, this.$refs.oldpassword.value, this.$refs.newpassword1.value, this.$refs.newpassword2.value)
+        UserService.putChangePassword(this.user.id, this.$refs.oldPassword.value, this.$refs.newPassword1.value, this.$refs.newPassword2.value)
         console.log("222", this.user.id)
-        console.log("333", this.$refs.oldpassword.value)
-        console.log("444", this.$refs.newpassword1.value)
-        console.log("555", this.$refs.newpassword2.value)
-
-        this.checkchangepassword = false
+        console.log("333", this.$refs.oldPassword.value)
+        console.log("444", this.$refs.newPassword1.value)
+        console.log("555", this.$refs.newPassword2.value)
+        this.checkChangePassword = false
       }
     },
     failChangePassword() {
@@ -334,12 +363,13 @@ export default {
         center: true
       });
     },
-
     ser_fun() {
       this
     }, 
   },
 }
+
+
 </script>
 
 <style>

@@ -8,10 +8,7 @@ import LoginPage from '@/views/Login.vue'
 import UserPage from '@/views/UserPage.vue'
 import MailRedirect from '@/views/MailRedirect.vue'
 import UserPage2 from '@/views/UserPage2.vue'
-import Messenge from '@/views/Messenge.vue'
-import FriendList from '@/views/FriendList.vue'
 import UserPageRoomList from '@/views/UserPageRoomList.vue'
-import Notification from '@/views/Notification.vue'
 import Test from '@/views/Test.vue'
 import Test2 from '@/views/Test2.vue'
 
@@ -59,16 +56,6 @@ const routes = [
     path: '/userpage2',
     name: 'userpage2',
     component: UserPage2,
-  },
-  {
-    path: '/message',
-    name: 'message',
-    component: Messenge,
-  },
-  {
-    path: '/friendlist',
-    name: 'friendlist',
-    component: FriendList,
   },
   {
     path: '/userpage_roomlist',
