@@ -49,3 +49,7 @@ go build main.go
 ```cmd
 main.exe
 ```
+### Input DSN (squlit location)
+```cmd
+<path>/db.sqlite3
+```
