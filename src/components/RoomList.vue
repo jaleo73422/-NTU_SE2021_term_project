@@ -16,7 +16,7 @@
             v-for="(room, index) in rooms"
             v-bind:key="index"
           >
-            <UserPageRoomCard :room="room" />
+            <RoomListCard :room="room" />
           </div>
         </div>
       </el-main>
@@ -26,14 +26,14 @@
 
 <script>
 import UserPageSideBar from '@/components/UserPageSideBar.vue'
-import UserPageRoomCard from '@/views/UserPageRoomCard.vue'
+import RoomListCard from '@/components/RoomListCard.vue'
 import UserService from '@/services/UserService.js'
 import { ElMessage } from 'element-plus'
 
 export default {
   components: {
     UserPageSideBar,
-    UserPageRoomCard,
+    RoomListCard,
   },
 
   data() {

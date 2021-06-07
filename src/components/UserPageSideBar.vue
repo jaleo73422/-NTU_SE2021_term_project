@@ -20,7 +20,7 @@
 
           <el-submenu index="4">
             <template #title
-              ><router-link to="/userpage_roomlist"
+              ><router-link to="/roomlist"
                 ><i class="el-icon-s-home"></i>Room</router-link
               ></template
             >

@@ -8,7 +8,7 @@ import LoginPage from '@/views/Login.vue'
 import UserPage from '@/views/UserPage.vue'
 import MailRedirect from '@/views/MailRedirect.vue'
 import CommonRedirect from '@/views/CommonRedirect.vue'
-import UserPageRoomList from '@/views/UserPageRoomList.vue'
+import RoomList from '@/components/RoomList.vue'
 
 const routes = [
   {
@@ -63,9 +63,9 @@ const routes = [
     props: true,
   },
   {
-    path: '/userpage_roomlist',
-    name: 'userpage_roomlist',
-    component: UserPageRoomList,
+    path: '/roomlist',
+    name: 'roomlist',
+    component: RoomList,
   },
   {
     path: '/notification',
