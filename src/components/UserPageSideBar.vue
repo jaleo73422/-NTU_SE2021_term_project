@@ -5,7 +5,7 @@
         <el-menu :default-openeds="['1', '2', '3', '4', '5']">
           <el-submenu index="1">
             <template #title
-              ><router-link to="/userpage2"
+              ><router-link to="/profile"
                 ><i class="el-icon-message"></i>About me</router-link
               ></template
             >

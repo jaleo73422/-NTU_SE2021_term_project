@@ -31,6 +31,11 @@ export default {
   data() {
     return {
       images: [
+        'https://i.imgur.com/kN4J0UL.jpg',
+        '',
+        'https://i.imgur.com/17SSeJb.png',
+        'https://i.imgur.com/o2uS5WX.png',
+        'https://i.imgur.com/wc0HqRT.png',
         'https://i.imgur.com/qdIZSWc.jpg',
         'https://i.imgur.com/GOaM9dB.jpg',
         'https://i.imgur.com/G65qPbl.jpg',

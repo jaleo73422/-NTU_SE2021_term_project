@@ -26,9 +26,6 @@
         </el-menu-item>
         <el-menu-item @click="logout"> Logout </el-menu-item>
         <el-menu-item route="/profile" index="/profile"> User </el-menu-item>
-        <el-menu-item route="/userpage2" index="/userpage2"> User </el-menu-item>
-        <el-menu-item route="/test" index="/test"> Test </el-menu-item>
-        <el-menu-item route="/test2" index="/test2"> Test2 </el-menu-item>
       </div>
       <div class="menu-item-group right-group">
         <el-menu-item class="searchbar" index="/">

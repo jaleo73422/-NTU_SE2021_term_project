@@ -1,21 +1,14 @@
 import axios from 'axios'
 import store from '@/store/index.js'
+import router from '@/router/index.js'
 
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 // axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
 
-const apiClient = axios.create({
-  baseURL: `http://localhost:3000`,
-  withCredentials: false, // This is the default
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  },
-})
-
 const apiDjango = axios.create({
   baseURL: `http://localhost:8000`,
+  // baseURL: `https://ntu-online-group-api.herokuapp.com/`,
   withCredentials: false, // This is the default
   headers: {
     Accept: 'application/json',
@@ -42,7 +35,7 @@ apiDjango.interceptors.response.use(
         case 401:
           console.log('登入無效')
           store.dispatch('logout')
-          this.$router.push('/')
+          router.push('/')
           break
         case 404:
           console.log('找不到該頁面')
@@ -75,6 +68,8 @@ export default {
   },
   postRoom(room) {
     // title, introduction, create_time, valid_time, room_type, room_category, people_limit
+    console.log('[Room]:', room.date2.toString())
+
     const keyMapping = {
       description: 'introduction',
       type: 'room_type',
@@ -82,7 +77,12 @@ export default {
       category: 'room_category',
     }
     const renamedRoom = this.renameKeys(room, keyMapping)
-    console.log(renamedRoom)
+    renamedRoom['valid_time'] =
+      room.date1.toISOString().slice(0, 10) +
+      ' ' +
+      room.date2.toString().slice(16, 24)
+
+    console.log('[renamedRoom]:', renamedRoom)
     return apiDjango.post('/room/', renamedRoom)
   },
 
@@ -104,10 +104,10 @@ export default {
       nickname: nickname,
     })
   },
-  deleteLeaveRoom(roomId){
+  deleteLeaveRoom(roomId) {
     return apiDjango.delete('room/' + roomId + '/leave_room/')
   },
-  deleteRoom(roomId){
+  deleteRoom(roomId) {
     return apiDjango.delete('room/' + roomId + '/')
   },
 
@@ -160,18 +160,21 @@ export default {
   getUserId() {
     return apiDjango.get('/api/user/get_id/')
   },
-  getUserRooms(){
+  getUserDetail(userId) {
+    return apiDjango.get('/api/user/' + userId + '/')
+  },
+  getUserRooms() {
     return apiDjango.get('/user_room/')
   },
-  // --------------------------------------
-  // json-server used
-  getUsers_js(name) {
-    return apiClient.get('/users/' + name)
+  getMailVerify(userToken, token) {
+    return apiDjango.get(
+      '/api/user/verify_email/' + userToken + '/' + token + '/'
+    )
   },
-  getRooms_js() {
-    return apiClient.get('/rooms/')
-  },
-  postRoom_js(room) {
-    return apiClient.post('/rooms', room)
+  postResetPassword(userToken, token, _password) {
+    return apiDjango.post(
+      '/api/user/password_reset/' + userToken + '/' + token + '/',
+      { password: _password }
+    )
   },
 }

@@ -1,102 +1,421 @@
 <template>
-  <!-- id, title, introduction, create_time, valid_time, room_type, room_category,
-  people_limit -->
+  <div class="userpage">
+    <el-container>
+      <UserPageSideBar />
+      <router-view />
 
-  <div>
-    <el-container class="create-form">
-      <el-form ref="form" :model="room" label-width="80px">
-        <h1>Create an Room</h1>
-        <el-form-item label="Title">
-          <el-input v-model="room.title"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="createEvent">Create Room</el-button>
-          <!-- @submit.prevent="createEvent" -->
-          <el-button>Cancel</el-button>
-        </el-form-item>
-      </el-form>
+      <el-container>
+        <el-main>
+          <div class="profile">
+            <div style="text-align:left;" class="password_title">
+              <h1><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ user.nickname }}</h1>
+            </div>
+
+            <el-divider></el-divider>
+
+            <div class="info">
+              <div class="infotext">
+                <el-row>
+                  <i style="font-size: 50px" class="el-icon-paperclip"></i>
+                  <h3
+                    style="
+                      margin-left: 10px;
+                      margin-top: 0px;
+                      font-size: 12px;
+                      color: gray;
+                    "
+                  >ID</h3>
+                  <h2
+                    style="
+                      margin-left: -12px;
+                      margin-top: -5px;
+                      font-size: 20px;
+                    "
+                  ><br />{{ user.nickname }}</h2>
+                </el-row>
+
+                <el-row>
+                  <i style="font-size: 50px" class="el-icon-message"></i>
+                  <h3
+                    style="
+                      margin-left: 10px;
+                      margin-top: 0px;
+                      font-size: 12px;
+                      color: gray;
+                    "
+                  >E-mail</h3>
+                  <h2
+                    style="
+                      margin-left: -30px;
+                      margin-top: -5px;
+                      font-size: 20px;
+                    "
+                  ><br />{{ user.email }}</h2>
+                </el-row>
+
+                <el-row>
+                  <i style="font-size: 50px" class="el-icon-user-solid"></i>
+                  <h3
+                    style="
+                      margin-left: 10px;
+                      margin-top: 0px;
+                      font-size: 12px;
+                      color: gray;
+                    "
+                  >name</h3>
+                  <h2
+                    style="
+                      margin-left: -30px;
+                      margin-top: -5px;
+                      font-size: 20px;
+                    "
+                  >
+                    <br />{{ user.lastName }},<el-button
+                      class="btn"
+                      @click="clickLastName">edit</el-button>
+                      {{ user.firstName }}<el-button class="btn" @click="clickFirstName">edit</el-button>
+                  </h2>
+
+                  <el-alert
+                    v-show="checkLastName"
+                    type="info"
+                    @close="cancelEditLastName"
+                    >
+                    <input
+                    v-if="checkLastName"
+                    type="text"
+                    v-model="lastName"
+                    prefix-icon="fas fa-lock"
+                    @keyup.enter="saveLastName"
+                    ref="newlastname"/>
+                    <el-button v-show="checkLastName" @click="saveLastName">save</el-button>
+                  </el-alert>
+
+                  <el-alert
+                    v-show="checkFirstName"
+                    type="info"
+                    @close="cancelEditFirstName"
+                    >
+                    <input
+                    v-if="checkFirstName"
+                    type="text"
+                    v-model="firstName"
+                    prefix-icon="fas fa-lock"
+                    @keyup.enter="saveFirstName"
+                    ref="newfirstname"/>
+                    <el-button v-show="checkFirstName" @click="saveFirstName">save</el-button>
+                  </el-alert>
+
+                  <!-- <input
+                    v-show="checkLastName"
+                    type="text"
+                    v-model="lastName"
+                    @keyup.enter="saveLastName"
+                    ref="newlastname"/>
+                  <el-button v-show="checkLastName" @click="saveLastName">save</el-button>
+                  <input
+                    v-show="checkFirstName"
+                    type="text"
+                    v-model="firstName"
+                    @keyup.enter="saveFirstName"
+                    ref="newfirstname"/>
+                  <el-button v-show="checkFirstName" @click="saveFirstName">save</el-button> -->
+                </el-row>
+
+                <el-row>
+                  <i style="font-size: 50px" class="el-icon-postcard"></i>
+                  <h3
+                    style="
+                      margin-left: 10px;
+                      margin-top: 0px;
+                      font-size: 12px;
+                      color: gray;
+                    "
+                  >department</h3>
+                  <h2
+                    style="
+                      margin-left: -65px;
+                      margin-top: -5px;
+                      font-size: 20px;
+                    "
+                  ><br />{{ user.department }}</h2>
+                </el-row>
+              </div>
+            </div>
+          </div>
+
+        <el-main>
+          <div class="password">
+            <div style="text-align:left;" class="password_title">
+              <h1><br />&nbsp;&nbsp;&nbsp;&nbsp;Password</h1>
+            </div>
+
+            <el-divider></el-divider>
+
+            <div class="info">
+              <div class="infotext">
+                <el-row>
+                  <i
+                    style="font-size: 50px; margin-left: 20px"
+                    class="el-icon-copy-document"
+                  ></i>
+                  <h3
+                    style="
+                      margin-left: 10px;
+                      margin-top: 0px;
+                      font-size: 12px;
+                      color: gray;"
+                  >Password</h3>
+                  <h2
+                    style="
+                      margin-left: -50px;
+                      margin-top: -5px;
+                      font-size: 20px;"
+                  ><br />
+                    <el-button
+                    class="btn" 
+                    @click="clickChangePasswoed">change</el-button>
+
+                    <el-alert
+                      v-show="checkChangePassword"
+                      title="Change your password!"
+                      type="info"
+                      closable="false"
+                      @close="CancelChangePassword"
+                      center>
+                      <input
+                        center
+                        v-model="passwordModel.oldPassword"
+                        placeholder="Old password"
+                        type="password"
+                        prefix-icon="fas fa-lock"
+                        ref="oldPassword"/>
+                      <br/>
+                      <input
+                        center
+                        v-model="passwordModel.newPassword1"
+                        placeholder="New password"
+                        type="password"
+                        prefix-icon="fas fa-lock"
+                        ref="newPassword1"/>
+                      <br/>
+                      <input
+                        center
+                        v-model="passwordModel.newPassword2"
+                        placeholder="Again"
+                        type="password"
+                        prefix-icon="fas fa-lock"
+                        ref="newPassword2"
+                        @keyup.enter="sumitChangePassword"/>
+                      <br/>
+                      <el-button type="info" round @click="sumitChangePassword">Save</el-button>
+                    </el-alert>
+                  </h2>
+                  <h2
+                    style="
+                      margin-left: 10px;
+                      margin-top: -7px;
+                      font-size: 20px;"
+                  >
+                  </h2>
+                </el-row>
+              </div>
+            </div>
+          </div>
+        </el-main>
+        </el-main>
+      </el-container>
     </el-container>
   </div>
+
+
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
+import UserPageSideBar from '@/components/UserPageSideBar.vue'
+import UserService from '@/services/UserService.js'
 export default {
-  components: null,
+  components: {
+    UserPageSideBar,
+  },
   data() {
     return {
-      //categories: this.$store.state.categories,
-      //old_room: this.createFreshRoomObject(),
-      room: {
-        organizer: '1',
-        capacity: 0,
-        title: '2',
-        region: '3',
-        date1: '4',
-        date2: '5',
-        invite: false,
-        tag: [],
-        type: '6',
-        description: '7',
+      checkLastName: false,
+      checkFirstName: false,
+      checkChangePassword: false,
+      user: {
+        id: 0,
+        nickname: '',
+        email: '',
+        department: '',
+        lastName: '',
+        firstName: '',
+      },
+      passwordModel: {
+        oldPassword: '',
+        newPassword1: '',
+        newPassword2: '',
+      },
+      loading: false,
+      rules: {
+        password: [
+          { required: true, message: 'Password is required', trigger: 'blur' },
+          {
+            min: 4,
+            message: 'Password length should be at least 5 characters',
+            trigger: 'blur',
+          },
+        ],
       },
     }
   },
-  created() {
-    //this.checkAuth()
+  async created() {
+    if (this.$store.state.token) {
+      this.$store
+        .dispatch('refreshToken')
+        .then((res) => {
+          console.log("f1", res)
+          return UserService.getUserId()
+        }).then((res) => {
+          console.log("f2", res)
+          this.user.id = res.data.id
+          console.log("f3", this.user.id)
+          return this.ser_fun()
+        }).then((res) => {
+          console.log("4444", res)
+          return UserService.getUser(this.user.id)
+        }).then((res) => {
+          console.log("f4", res.data)
+          this.user.email = res.data.email
+          this.user.nickname = res.data.email
+          this.user.department = res.data.department
+          this.user.lastName = res.data.last_name
+          this.user.firstName = res.data.first_name
+        })
+        .catch((err) => {
+          if (
+            'code' in err.response.data &&
+            err.response.data['code'] == 'token_not_valid'
+          ) {
+            this.$store.dispatch('resetToken')
+            this.$router.push({
+              name: 'login',
+            })
+          }
+        })
+    } else {
+      console.log('plz login !')
+      this.$router.push({
+        name: 'login',
+      })
+    }
   },
   methods: {
-    checkAuth() {
-      this.$store.state.token &&
-        this.$store
-          .dispatch('verifyToken', this.event)
-          .then((resVerify) => {
-            console.log('verifyToken Result：' + resVerify)
-            return this.init()
-          })
-          .catch((err) => {
-            console.log('[RoomCreate.vue]', err)
-            window.location.href = '/login'
-          })
+    clickLastName() {
+      this.checkLastName = true
     },
-    init() {
-      console.log('exec init')
+    cancelEditLastName() {
+      this.checkLastName = false
     },
-    createEvent() {
-      this.$store
-        .dispatch('createEvent', this.event)
-        .then(() => {
-          this.$router.push({
-            name: 'event-show',
-            params: { id: this.event.id },
-          })
-          this.event = this.createFreshEventObject()
-        })
-        .catch(() => {
-          console.log('There was a problem creating your event')
-        })
+    saveLastName() {
+      this.checkLastName = false
+      this.user.lastName=this.$refs.newlastname.value
+      console.log('666', this.$refs.newlastname.value)
+      UserService.putUserEdit(this.user.id, this.$refs.newlastname.value, this.user.firstName)
     },
-    createFreshRoomObject() {
-      const user = this.$store.state.user
-
-      return {
-        user: user,
-        department: '',
-        organizer: user, // owner
-        title: '',
-        description: '',
-        capacity: 10,
-        type: 'public',
+    clickFirstName() {
+      this.checkFirstName = true
+    },
+    cancelEditFirstName() {
+      this.checkFirstName = false
+    },
+    saveFirstName() {
+      this.checkFirstName = false
+      this.user.firstName=this.$refs.newfirstname.value
+      console.log('777', this.$refs.newfirstname.value)
+      UserService.putUserEdit(this.user.id, this.user.lastName, this.$refs.newfirstname.value)
+    },
+    clickChangePasswoed() {
+      this.checkChangePassword = true
+      console.log("12346", this.checkChangePassword)
+    },
+    CancelChangePassword() {
+      this.checkChangePassword = false
+      console.log("7891011", this.checkChangePassword)
+    },
+    sumitChangePassword() {
+      console.log("111")
+      if (this.$refs.newPassword1.value != this.$refs.newPassword2.value) {
+        console.log("wrong")
+        this.failChangePassword()
+      } else {
+        UserService.putChangePassword(this.user.id, this.$refs.oldPassword.value, this.$refs.newPassword1.value, this.$refs.newPassword2.value)
+        console.log("222", this.user.id)
+        console.log("333", this.$refs.oldPassword.value)
+        console.log("444", this.$refs.newPassword1.value)
+        console.log("555", this.$refs.newPassword2.value)
+        this.checkChangePassword = false
       }
     },
-  },
-  computed: {
-    ...mapGetters(['isAuth']),
+    failChangePassword() {
+      this.$message({
+        message: 'Error!',
+        center: true
+      });
+    },
+    ser_fun() {
+      this
+    }, 
   },
 }
+
+
 </script>
-<style scoped>
-.create-form {
-  justify-content: center;
+
+<style>
+.profile {
+  background-color: rgb(238, 233, 227);
+  width: 1000px;
+  margin-left: 20px;
 }
+
+.profile .imgid {
+  top: 160px;
+  left: 620px;
+}
+
+.profile .imgbut {
+  top: 180px;
+  left: 620px;
+}
+
+.profile .info {
+}
+
+.profile .info .infotext {
+  text-align: left;
+  margin-left: 20px;
+}
+
+.el-row {
+  margin-bottom: 20px;
+}
+
+.password {
+  background-color: rgb(238, 233, 227);
+  width: 1000px;
+}
+
+.password .password_title {
+  top: 50px;
+}
+
+.password .info {
+}
+
+.password .info .infotext {
+  text-align: left;
+  margin-top: 10px;
+}
+
 </style>

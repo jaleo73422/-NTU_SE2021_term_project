@@ -7,10 +7,8 @@ import RoomShow from '@/views/RoomShow.vue'
 import LoginPage from '@/views/Login.vue'
 import UserPage from '@/views/UserPage.vue'
 import MailRedirect from '@/views/MailRedirect.vue'
-import UserPage2 from '@/views/UserPage2.vue'
+import CommonRedirect from '@/views/CommonRedirect.vue'
 import UserPageRoomList from '@/views/UserPageRoomList.vue'
-import Test from '@/views/Test.vue'
-import Test2 from '@/views/Test2.vue'
 
 const routes = [
   {
@@ -42,7 +40,7 @@ const routes = [
     component: LoginPage,
   },
   {
-    path: '/forgotpwd/:mailToken',
+    path: '/forgetpwd/:userToken/:mailToken',
     name: 'mail-verify',
     component: MailRedirect,
     props: true,
@@ -53,9 +51,16 @@ const routes = [
     component: UserPage,
   },
   {
-    path: '/userpage2',
-    name: 'userpage2',
-    component: UserPage2,
+    path: '/:type',
+    name: 'unknow-redirect',
+    component: CommonRedirect,
+    props: true,
+  },
+  {
+    path: '/:type/:userToken/:token',
+    name: 'verify-mail',
+    component: CommonRedirect,
+    props: true,
   },
   {
     path: '/userpage_roomlist',
@@ -66,16 +71,6 @@ const routes = [
     path: '/notification',
     name: 'notification',
     component: Notification,
-  },
-  {
-    path: '/test',
-    name: 'test',
-    component: Test,
-  },
-  {
-    path: '/test2',
-    name: 'test2',
-    component: Test2,
   },
 ]
 
