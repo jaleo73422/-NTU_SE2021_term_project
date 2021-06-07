@@ -13,12 +13,39 @@ npm update --force
 ```
 
 ## Front-end
+### Project setup
+```cmd
+npm install
+```
+### Compiles and hot-reloads for development
+```cmd
+npm run serve
+```
 
 ## Back-end
+#### Activate virtual environment
+```cmd
+source venv/Scripts/activate
+```
+### Install require package
+```cmd
+pip install -r requirements.txt
+```
+### Run the server
+```cmd
+python manage.py runserver
+```
 
 ## Websocket
-### 
-
+### Download package
+```cmd
+go mod download
+```
+### Build
+```cmd
+go build main.go
+```
+### Run
 ```cmd
 main.exe
 ```
