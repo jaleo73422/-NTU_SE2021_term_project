@@ -1,7 +1,6 @@
 <template v-:fixed>
   <div class="userpage">
     <el-container>
-      <UserPageSideBar />
       <router-view />
 
       <el-main id="roomCardContainer" v-if="rooms.length > 0">
@@ -25,14 +24,12 @@
 </template>
 
 <script>
-import UserPageSideBar from '@/components/UserPageSideBar.vue'
 import RoomListCard from '@/components/RoomListCard.vue'
 import UserService from '@/services/UserService.js'
 import { ElMessage } from 'element-plus'
 
 export default {
   components: {
-    UserPageSideBar,
     RoomListCard,
   },
 

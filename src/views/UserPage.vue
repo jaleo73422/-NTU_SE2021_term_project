@@ -1,245 +1,263 @@
 <template>
+  <!-- <RoomList /> -->
   <div class="userpage">
-    <el-container>
-      <UserPageSideBar />
-      <router-view />
-
-      <el-container>
-        <el-main>
-          <div class="profile">
-            <div style="text-align:left;" class="password_title">
-              <h1><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ user.nickname }}</h1>
-            </div>
-
-            <el-divider></el-divider>
-
-            <div class="info">
-              <div class="infotext">
-                <el-row>
-                  <i style="font-size: 50px" class="el-icon-paperclip"></i>
-                  <h3
-                    style="
-                      margin-left: 10px;
-                      margin-top: 0px;
-                      font-size: 12px;
-                      color: gray;
-                    "
-                  >ID</h3>
-                  <h2
-                    style="
-                      margin-left: -12px;
-                      margin-top: -5px;
-                      font-size: 20px;
-                    "
-                  ><br />{{ user.nickname }}</h2>
-                </el-row>
-
-                <el-row>
-                  <i style="font-size: 50px" class="el-icon-message"></i>
-                  <h3
-                    style="
-                      margin-left: 10px;
-                      margin-top: 0px;
-                      font-size: 12px;
-                      color: gray;
-                    "
-                  >E-mail</h3>
-                  <h2
-                    style="
-                      margin-left: -30px;
-                      margin-top: -5px;
-                      font-size: 20px;
-                    "
-                  ><br />{{ user.email }}</h2>
-                </el-row>
-
-                <el-row>
-                  <i style="font-size: 50px" class="el-icon-user-solid"></i>
-                  <h3
-                    style="
-                      margin-left: 10px;
-                      margin-top: 0px;
-                      font-size: 12px;
-                      color: gray;
-                    "
-                  >name</h3>
-                  <h2
-                    style="
-                      margin-left: -30px;
-                      margin-top: -5px;
-                      font-size: 20px;
-                    "
-                  >
-                    <br />{{ user.lastName }},<el-button
-                      class="btn"
-                      @click="clickLastName">edit</el-button>
-                      {{ user.firstName }}<el-button class="btn" @click="clickFirstName">edit</el-button>
-                  </h2>
-
-                  <el-alert
-                    v-show="checkLastName"
-                    type="info"
-                    @close="cancelEditLastName"
-                    >
-                    <input
-                    v-if="checkLastName"
-                    type="text"
-                    v-model="lastName"
-                    prefix-icon="fas fa-lock"
-                    @keyup.enter="saveLastName"
-                    ref="newlastname"/>
-                    <el-button v-show="checkLastName" @click="saveLastName">save</el-button>
-                  </el-alert>
-
-                  <el-alert
-                    v-show="checkFirstName"
-                    type="info"
-                    @close="cancelEditFirstName"
-                    >
-                    <input
-                    v-if="checkFirstName"
-                    type="text"
-                    v-model="firstName"
-                    prefix-icon="fas fa-lock"
-                    @keyup.enter="saveFirstName"
-                    ref="newfirstname"/>
-                    <el-button v-show="checkFirstName" @click="saveFirstName">save</el-button>
-                  </el-alert>
-
-                  <!-- <input
-                    v-show="checkLastName"
-                    type="text"
-                    v-model="lastName"
-                    @keyup.enter="saveLastName"
-                    ref="newlastname"/>
-                  <el-button v-show="checkLastName" @click="saveLastName">save</el-button>
-                  <input
-                    v-show="checkFirstName"
-                    type="text"
-                    v-model="firstName"
-                    @keyup.enter="saveFirstName"
-                    ref="newfirstname"/>
-                  <el-button v-show="checkFirstName" @click="saveFirstName">save</el-button> -->
-                </el-row>
-
-                <el-row>
-                  <i style="font-size: 50px" class="el-icon-postcard"></i>
-                  <h3
-                    style="
-                      margin-left: 10px;
-                      margin-top: 0px;
-                      font-size: 12px;
-                      color: gray;
-                    "
-                  >department</h3>
-                  <h2
-                    style="
-                      margin-left: -65px;
-                      margin-top: -5px;
-                      font-size: 20px;
-                    "
-                  ><br />{{ user.department }}</h2>
-                </el-row>
+    <el-tabs :tab-position="tabPosition">
+      <el-tab-pane label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;關於我&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
+        <el-container>
+          <el-main>
+            <div class="profile">
+              <div style="text-align:left;" class="password_title">
+                <h1><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ user.nickname }}</h1>
               </div>
-            </div>
-          </div>
 
-        <el-main>
-          <div class="password">
-            <div style="text-align:left;" class="password_title">
-              <h1><br />&nbsp;&nbsp;&nbsp;&nbsp;Password</h1>
-            </div>
+              <el-divider></el-divider>
 
-            <el-divider></el-divider>
+              <div class="info">
+                <div class="infotext">
+                  <el-row>
+                    <i style="font-size: 50px" class="el-icon-paperclip"></i>
+                    <h3
+                      style="
+                        margin-left: 10px;
+                        margin-top: 0px;
+                        font-size: 12px;
+                        color: gray;
+                      "
+                    >暱稱</h3>
+                    <h2
+                      style="
+                        margin-left: -20px;
+                        margin-top: -5px;
+                        font-size: 20px;
+                      "
+                    ><br />{{ user.nickname }}</h2>
+                  </el-row>
 
-            <div class="info">
-              <div class="infotext">
-                <el-row>
-                  <i
-                    style="font-size: 50px; margin-left: 20px"
-                    class="el-icon-copy-document"
-                  ></i>
-                  <h3
-                    style="
-                      margin-left: 10px;
-                      margin-top: 0px;
-                      font-size: 12px;
-                      color: gray;"
-                  >Password</h3>
-                  <h2
-                    style="
-                      margin-left: -50px;
-                      margin-top: -5px;
-                      font-size: 20px;"
-                  ><br />
-                    <el-button
-                    class="btn" 
-                    @click="clickChangePasswoed">change</el-button>
+                  <el-row>
+                    <i style="font-size: 50px" class="el-icon-message"></i>
+                    <h3
+                      style="
+                        margin-left: 10px;
+                        margin-top: 0px;
+                        font-size: 12px;
+                        color: gray;
+                      "
+                    >信箱</h3>
+                    <h2
+                      style="
+                        margin-left: -20px;
+                        margin-top: -5px;
+                        font-size: 20px;
+                      "
+                    ><br />{{ user.email }}</h2>
+                  </el-row>
+
+                  <el-row>
+                    <i style="font-size: 50px" class="el-icon-user-solid"></i>
+                    <h3
+                      style="
+                        margin-left: 10px;
+                        margin-top: 0px;
+                        font-size: 12px;
+                        color: gray;
+                      "
+                    >姓名</h3>
+                    <h2
+                      style="
+                        margin-left: -15px;
+                        margin-top: -5px;
+                        font-size: 20px;
+                      "
+                    >
+                      <br />{{ user.lastName }},<el-button
+                        class="btn"
+                        @click="clickLastName">編輯</el-button>
+                        {{ user.firstName }}<el-button class="btn" @click="clickFirstName">編輯</el-button>
+                    </h2>
 
                     <el-alert
-                      v-show="checkChangePassword"
-                      title="Change your password!"
+                      v-show="checkLastName"
                       type="info"
-                      closable="false"
-                      @close="CancelChangePassword"
-                      center>
+                      @close="cancelEditLastName"
+                      >
                       <input
-                        center
-                        v-model="passwordModel.oldPassword"
-                        placeholder="Old password"
-                        type="password"
-                        prefix-icon="fas fa-lock"
-                        ref="oldPassword"/>
-                      <br/>
-                      <input
-                        center
-                        v-model="passwordModel.newPassword1"
-                        placeholder="New password"
-                        type="password"
-                        prefix-icon="fas fa-lock"
-                        ref="newPassword1"/>
-                      <br/>
-                      <input
-                        center
-                        v-model="passwordModel.newPassword2"
-                        placeholder="Again"
-                        type="password"
-                        prefix-icon="fas fa-lock"
-                        ref="newPassword2"
-                        @keyup.enter="sumitChangePassword"/>
-                      <br/>
-                      <el-button type="info" round @click="sumitChangePassword">Save</el-button>
+                      v-if="checkLastName"
+                      type="text"
+                      v-model="lastName"
+                      prefix-icon="fas fa-lock"
+                      @keyup.enter="saveLastName"
+                      ref="newlastname"/>
+                      <el-button v-show="checkLastName" @click="saveLastName">儲存</el-button>
                     </el-alert>
-                  </h2>
-                  <h2
-                    style="
-                      margin-left: 10px;
-                      margin-top: -7px;
-                      font-size: 20px;"
-                  >
-                  </h2>
-                </el-row>
+
+                    <el-alert
+                      v-show="checkFirstName"
+                      type="info"
+                      @close="cancelEditFirstName"
+                      >
+                      <input
+                      v-if="checkFirstName"
+                      type="text"
+                      v-model="firstName"
+                      prefix-icon="fas fa-lock"
+                      @keyup.enter="saveFirstName"
+                      ref="newfirstname"/>
+                      <el-button v-show="checkFirstName" @click="saveFirstName">儲存</el-button>
+                    </el-alert>
+
+                    <!-- <input
+                      v-show="checkLastName"
+                      type="text"
+                      v-model="lastName"
+                      @keyup.enter="saveLastName"
+                      ref="newlastname"/>
+                    <el-button v-show="checkLastName" @click="saveLastName">save</el-button>
+                    <input
+                      v-show="checkFirstName"
+                      type="text"
+                      v-model="firstName"
+                      @keyup.enter="saveFirstName"
+                      ref="newfirstname"/>
+                    <el-button v-show="checkFirstName" @click="saveFirstName">save</el-button> -->
+                  </el-row>
+
+                  <el-row>
+                    <i style="font-size: 50px" class="el-icon-postcard"></i>
+                    <h3
+                      style="
+                        margin-left: 10px;
+                        margin-top: 0px;
+                        font-size: 12px;
+                        color: gray;
+                      "
+                    >科系</h3>
+                    <h2
+                      style="
+                        margin-left: -15px;
+                        margin-top: -5px;
+                        font-size: 20px;
+                      "
+                    ><br />{{ user.department }}</h2>
+                  </el-row>
+                </div>
               </div>
             </div>
-          </div>
-        </el-main>
-        </el-main>
-      </el-container>
-    </el-container>
+
+            <el-main>
+              <div class="password">
+                <div style="text-align:left;" class="password_title">
+                  <h1><br />&nbsp;&nbsp;&nbsp;&nbsp;Password</h1>
+                </div>
+
+                <el-divider></el-divider>
+
+                <div class="info">
+                  <div class="infotext">
+                    <el-row>
+                      <i
+                        style="font-size: 50px; margin-left: 20px"
+                        class="el-icon-copy-document"
+                      ></i>
+                      <h3
+                        style="
+                          margin-left: 10px;
+                          margin-top: 0px;
+                          font-size: 12px;
+                          color: gray;"
+                      >Password</h3>
+                      <h2
+                        style="
+                          margin-left: -50px;
+                          margin-top: -5px;
+                          font-size: 20px;"
+                      ><br />
+                        <el-button
+                        class="btn" 
+                        @click="clickChangePasswoed">change</el-button>
+
+                        <el-alert
+                          v-show="checkChangePassword"
+                          title="Change your password!"
+                          type="info"
+                          closable="false"
+                          @close="CancelChangePassword"
+                          center>
+                          <input
+                            center
+                            v-model="passwordModel.oldPassword"
+                            placeholder="Old password"
+                            type="password"
+                            prefix-icon="fas fa-lock"
+                            ref="oldPassword"/>
+                          <br/>
+                          <input
+                            center
+                            v-model="passwordModel.newPassword1"
+                            placeholder="New password"
+                            type="password"
+                            prefix-icon="fas fa-lock"
+                            ref="newPassword1"/>
+                          <br/>
+                          <input
+                            center
+                            v-model="passwordModel.newPassword2"
+                            placeholder="Again"
+                            type="password"
+                            prefix-icon="fas fa-lock"
+                            ref="newPassword2"
+                            @keyup.enter="sumitChangePassword"/>
+                          <br/>
+                          <el-button type="info" round @click="sumitChangePassword">Save</el-button>
+                        </el-alert>
+                      </h2>
+                      <h2
+                        style="
+                          margin-left: 10px;
+                          margin-top: -7px;
+                          font-size: 20px;"
+                      >
+                      </h2>
+                    </el-row>
+                  </div>
+                </div>
+              </div>
+            </el-main>
+          </el-main>
+        </el-container>
+      </el-tab-pane>
+
+      <el-tab-pane label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;帳號管理&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
+      </el-tab-pane>
+
+      <el-tab-pane label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我的房間&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
+        <RoomList />
+      </el-tab-pane>
+
+      <el-tab-pane label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;房主管理&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
+      </el-tab-pane>
+
+      <el-tab-pane label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;入房記錄&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"></el-tab-pane>
+
+    </el-tabs>
+ 
+
+
   </div>
 
 
 </template>
 
 <script>
-import UserPageSideBar from '@/components/UserPageSideBar.vue'
 import UserService from '@/services/UserService.js'
+import RoomList from '@/components/RoomList.vue'
+
 export default {
   components: {
-    UserPageSideBar,
+    RoomList,
   },
   data() {
     return {
+      tabPosition: 'left',
       checkLastName: false,
       checkFirstName: false,
       checkChangePassword: false,
