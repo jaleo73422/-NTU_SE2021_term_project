@@ -9,6 +9,7 @@ import UserPage from '@/views/UserPage.vue'
 import MailRedirect from '@/views/MailRedirect.vue'
 import CommonRedirect from '@/views/CommonRedirect.vue'
 import RoomList from '@/components/RoomList.vue'
+import Test from '@/views/Test.vue'
 
 const routes = [
   {
@@ -71,6 +72,11 @@ const routes = [
     path: '/notification',
     name: 'notification',
     component: Notification,
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: Test,
   },
 ]
 

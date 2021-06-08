@@ -8,7 +8,7 @@
     </div>
     <div class="info">
       <div style="text-align:left; margin-left:40px;">
-        <p>crate time：{{ room.create_time }}</p>
+        <p>crate time：{{ room.create_time.slice(0, 10) }} {{ room.create_time.slice(11, 19) }} </p>
         <p>valid time：{{ room.valid_time }}</p>
         <p>room type：{{ room.room_type }}</p>
         <p>room category：{{ room.room_category }}</p>

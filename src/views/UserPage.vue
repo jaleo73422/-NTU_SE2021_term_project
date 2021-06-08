@@ -142,91 +142,87 @@
                 </div>
               </div>
             </div>
-
-            <el-main>
-              <div class="password">
-                <div style="text-align:left;" class="password_title">
-                  <h1><br />&nbsp;&nbsp;&nbsp;&nbsp;Password</h1>
-                </div>
-
-                <el-divider></el-divider>
-
-                <div class="info">
-                  <div class="infotext">
-                    <el-row>
-                      <i
-                        style="font-size: 50px; margin-left: 20px"
-                        class="el-icon-copy-document"
-                      ></i>
-                      <h3
-                        style="
-                          margin-left: 10px;
-                          margin-top: 0px;
-                          font-size: 12px;
-                          color: gray;"
-                      >Password</h3>
-                      <h2
-                        style="
-                          margin-left: -50px;
-                          margin-top: -5px;
-                          font-size: 20px;"
-                      ><br />
-                        <el-button
-                        class="btn" 
-                        @click="clickChangePasswoed">change</el-button>
-
-                        <el-alert
-                          v-show="checkChangePassword"
-                          title="Change your password!"
-                          type="info"
-                          closable="false"
-                          @close="CancelChangePassword"
-                          center>
-                          <input
-                            center
-                            v-model="passwordModel.oldPassword"
-                            placeholder="Old password"
-                            type="password"
-                            prefix-icon="fas fa-lock"
-                            ref="oldPassword"/>
-                          <br/>
-                          <input
-                            center
-                            v-model="passwordModel.newPassword1"
-                            placeholder="New password"
-                            type="password"
-                            prefix-icon="fas fa-lock"
-                            ref="newPassword1"/>
-                          <br/>
-                          <input
-                            center
-                            v-model="passwordModel.newPassword2"
-                            placeholder="Again"
-                            type="password"
-                            prefix-icon="fas fa-lock"
-                            ref="newPassword2"
-                            @keyup.enter="sumitChangePassword"/>
-                          <br/>
-                          <el-button type="info" round @click="sumitChangePassword">Save</el-button>
-                        </el-alert>
-                      </h2>
-                      <h2
-                        style="
-                          margin-left: 10px;
-                          margin-top: -7px;
-                          font-size: 20px;"
-                      >
-                      </h2>
-                    </el-row>
-                  </div>
-                </div>
-              </div>
-            </el-main>
           </el-main>
         </el-container>
       </el-tab-pane>
 
-      <el-tab-pane label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;帳號管理&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
+      <el-tab-pane label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;更改密碼&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
+        <div class="resetPWD">
+          <el-card class="reset-card">
+            <h2>變更密碼</h2>
+            <el-form
+              class="reset-form"
+              :model="passwordModel"
+              :rules="rules"
+              ref="form"
+              @submit.prevent="submit"
+            >
+              <el-form-item prop="oldPassword" label="請輸入舊密碼">
+                <!-- <el-input
+                  v-model="passwordModel.oldPassword"
+                  placeholder="Input password again"
+                  type="password"
+                  prefix-icon="fas fa-repeat"
+                ></el-input> -->
+                <input
+                  center
+                  v-model="passwordModel.oldPassword"
+                  placeholder="請輸入舊密碼"
+                  type="password"
+                  prefix-icon="fas fa-lock"
+                  ref="oldPassword"
+                  @keyup.enter="sumitChangePassword"/>
+              </el-form-item>
+
+              <el-form-item prop="newPassword1" label="請輸入新密碼">
+                <!-- <el-input
+                  v-model="passwordModel.newPassword1"
+                  placeholder="Input password"
+                  type="password"
+                  prefix-icon="fas fa-lock"
+                ></el-input> -->
+                <input
+                  center
+                  v-model="passwordModel.newPassword1"
+                  placeholder="請輸入新密碼"
+                  type="password"
+                  prefix-icon="fas fa-lock"
+                  ref="newPassword1"
+                  @keyup.enter="sumitChangePassword"/>
+              </el-form-item>
+
+              <el-form-item prop="newPassword2" label="再輸入一次">
+                <!-- <el-input
+                  v-model="passwordModel.newPassword2"
+                  placeholder="Input password again"
+                  type="password"
+                  prefix-icon="fas fa-repeat"
+                ></el-input> -->
+                <input
+                  center
+                  v-model="passwordModel.newPassword2"
+                  placeholder="再輸入一次"
+                  type="password"
+                  prefix-icon="fas fa-lock"
+                  ref="newPassword2"
+                  @keyup.enter="sumitChangePassword"/>
+              </el-form-item>
+
+              <el-form-item>
+                <!-- <el-button
+                  :loading="loading"
+                  class="login-button"
+                  type="primary"
+                  
+                  block
+                  >確定送出</el-button
+                > -->
+                <el-button type="info" round @click="sumitChangePassword">確認送出</el-button>
+              </el-form-item>
+            </el-form>
+          </el-card>
+        </div>
+        
       </el-tab-pane>
 
       <el-tab-pane label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我的房間&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
@@ -252,15 +248,22 @@ import UserService from '@/services/UserService.js'
 import RoomList from '@/components/RoomList.vue'
 
 export default {
+  props: ['userToken', 'mailToken'],
   components: {
     RoomList,
   },
   data() {
+    var validatePass2 = (rule, value, callback) => {
+      if (value !== this.passwordModel.newPassword1) {
+        callback(new Error('兩次輸入密碼不一致 !'))
+      } else {
+        callback()
+      }
+    }
     return {
       tabPosition: 'left',
       checkLastName: false,
       checkFirstName: false,
-      checkChangePassword: false,
       user: {
         id: 0,
         nickname: '',
@@ -276,13 +279,40 @@ export default {
       },
       loading: false,
       rules: {
-        password: [
-          { required: true, message: 'Password is required', trigger: 'blur' },
+        oldPassword:[
           {
-            min: 4,
-            message: 'Password length should be at least 5 characters',
+            required: true,
+            message: '此為必填欄位',
             trigger: 'blur',
           },
+          {
+            min: 4,
+            message: '密碼需至少4個字',
+            trigger: 'blur',
+          },
+
+        ],
+        newPassword1: [
+          {
+            required: true,
+            message: '此為必填欄位',
+            trigger: 'blur',
+          },
+          {
+            min: 4,
+            message: '密碼需至少4個字',
+            trigger: 'blur',
+          },
+        ],
+        newPassword2: [
+          { required: true, message: '此為必填欄位',
+          trigger: 'blur' },
+          {
+            min: 4,
+            message: '密碼需至少4個字',
+            trigger: 'blur',
+          },
+          { validator: validatePass2, trigger: 'blur' },
         ],
       },
     }
@@ -353,32 +383,51 @@ export default {
       console.log('777', this.$refs.newfirstname.value)
       UserService.putUserEdit(this.user.id, this.user.lastName, this.$refs.newfirstname.value)
     },
-    clickChangePasswoed() {
-      this.checkChangePassword = true
-      console.log("12346", this.checkChangePassword)
-    },
-    CancelChangePassword() {
-      this.checkChangePassword = false
-      console.log("7891011", this.checkChangePassword)
-    },
     sumitChangePassword() {
       console.log("111")
-      if (this.$refs.newPassword1.value != this.$refs.newPassword2.value) {
-        console.log("wrong")
-        this.failChangePassword()
+      if (this.$refs.oldPassword.value == "" | this.$refs.newPassword1.value == "" | this.$refs.newPassword2.value == "") {
+        console.log("wrong1")
+        this.noInputPassword()
+        this.passwordModel.oldPassword = ''
+        this.passwordModel.newPassword1 = ''
+        this.passwordModel.newPassword2 = ''
+      } else if (this.$refs.newPassword1.value != this.$refs.newPassword2.value) {
+        console.log("wrong2")
+        this.notEqualNewPassword()
+        this.passwordModel.oldPassword = ''
+        this.passwordModel.newPassword1 = ''
+        this.passwordModel.newPassword2 = ''
       } else {
         UserService.putChangePassword(this.user.id, this.$refs.oldPassword.value, this.$refs.newPassword1.value, this.$refs.newPassword2.value)
         console.log("222", this.user.id)
         console.log("333", this.$refs.oldPassword.value)
         console.log("444", this.$refs.newPassword1.value)
         console.log("555", this.$refs.newPassword2.value)
-        this.checkChangePassword = false
+        this.finishChangePassword()
+        this.passwordModel.oldPassword = ''
+        this.passwordModel.newPassword1 = ''
+        this.passwordModel.newPassword2 = ''
       }
     },
-    failChangePassword() {
+    notEqualNewPassword() {
       this.$message({
-        message: 'Error!',
-        center: true
+        message: '兩次密碼不一致',
+        center: true,
+        type: "warning",
+      });
+    },
+    noInputPassword() {
+      this.$message({
+        message: '輸入不能為空白',
+        center: true,
+        type: "warning",
+      });
+    },
+    finishChangePassword() {
+      this.$message({
+        message: '修改成功',
+        center: true,
+        type: "success",
       });
     },
     ser_fun() {
@@ -434,6 +483,59 @@ export default {
 .password .info .infotext {
   text-align: left;
   margin-top: 10px;
+}
+
+.resetPWD {
+  /* flex: 1; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-image: url('https://www.ntu.edu.tw/12scence/01b1.jpg'); */
+  /* background-size: cover; */
+}
+
+.resetPWD:before {
+  /* background-image: url('https://www.ntu.edu.tw/12scence/01b1.jpg'); */
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  content: '';
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+  display: block;
+  filter: blur(7px);
+}
+
+.reset-card {
+  background: rgba(255, 255, 255, 0.39);
+  border: none;
+  color: #ffffff;
+}
+
+.reset-form .el-input input {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.reset-form {
+  width: 290px;
+}
+
+.reset-button {
+  width: 100%;
+  margin-top: 40px;
+}
+
+.resetPWD .el-input__prefix {
+  background: rgb(238, 237, 234);
+  left: 0;
+  height: calc(100% - 2px);
+  left: 1px;
+  top: 1px;
+  border-radius: 3px;
 }
 
 </style>
